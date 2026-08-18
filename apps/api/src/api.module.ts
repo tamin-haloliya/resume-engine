@@ -4,11 +4,26 @@ import { ApiService } from './api.service';
 import { ResumeModule } from './resume/resume.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import Joi from 'joi';
 
 @Module({
   imports: [
     ResumeModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string()
+          .valid('development', 'production', 'test', 'provision')
+          .default('development'),
+        PORT: Joi.number().port().default(3000),
+
+        DATABASE_HOST: Joi.string().required(),
+        DATABASE_PORT: Joi.number().port().default(5432),
+        DATABASE_USER: Joi.string().required(),
+        DATABASE_PASSWORD: Joi.string().required(),
+        INIT_DB: Joi.string().required(),
+      }),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

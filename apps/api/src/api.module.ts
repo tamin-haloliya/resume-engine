@@ -4,6 +4,7 @@ import { ApiService } from './api.service';
 import { ResumeModule } from './resume/resume.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JobModule } from './job/job.module';
 import Joi from 'joi';
 
 @Module({
@@ -38,6 +39,7 @@ import Joi from 'joi';
         synchronize: config.get<string>('NODE_ENV') === 'development',
       }),
     }),
+    JobModule,
   ],
   controllers: [ApiController],
   providers: [ApiService],

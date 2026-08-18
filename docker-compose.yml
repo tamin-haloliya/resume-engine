@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${INIT_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql:rw
+
+  redis:
+    image: redis:8-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache:/data
+
+volumes:
+  pgdata:
+  cache:
+      
+    

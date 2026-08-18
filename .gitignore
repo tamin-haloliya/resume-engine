@@ -1,0 +1,49 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+apps/*/dist/
+build/
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# testing / coverage
+coverage/
+apps/*/coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# editor / IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# NestJS
+/dist
+/node_modules
+
+# uploaded/parsed files (local dev only — real storage is MinIO)
+uploads/
+tmp/
+
+# docker
+docker-compose.override.yml
+
+# misc
+*.tsbuildinfo
+.eslintcache

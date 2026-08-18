@@ -35,6 +35,7 @@ import Joi from 'joi';
         password: config.get<string>('DATABASE_PASSWORD'),
         database: config.get<string>('INIT_DB'),
         autoLoadEntities: true,
+        synchronize: config.get<string>('NODE_ENV') === 'development',
       }),
     }),
   ],

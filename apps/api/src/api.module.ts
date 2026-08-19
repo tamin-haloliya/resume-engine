@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobModule } from './job/job.module';
 import Joi from 'joi';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionFilter } from './common/filters/all-exception.filter';
 
 @Module({
   imports: [
@@ -42,6 +44,9 @@ import Joi from 'joi';
     JobModule,
   ],
   controllers: [ApiController],
-  providers: [ApiService],
+  providers: [
+    ApiService,
+    { provide: APP_FILTER, useClass: AllExceptionFilter },
+  ],
 })
 export class ApiModule {}

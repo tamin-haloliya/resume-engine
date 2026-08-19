@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { JobService } from './job.service';
 
@@ -10,5 +10,11 @@ export class JobController {
   async createJob(@Body() createJobDto: CreateJobDto) {
     const job = await this.jobService.create(createJobDto);
     return { message: 'New job added', job };
+  }
+
+  @Get()
+  async getJobs(@Query('page') page?: number, @Query('limit') limit?: number) {
+    const { jobs, total } = await this.jobService.findAll(page, limit);
+    return { jobs, total };
   }
 }

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Post,
   Query,
@@ -21,7 +22,10 @@ export class JobController {
   }
 
   @Get()
-  async findJobs(@Query('page') page?: number, @Query('limit') limit?: number) {
+  async findJobs(
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+  ) {
     const { jobs, total } = await this.jobService.findAll(page, limit);
     return { jobs, total };
   }

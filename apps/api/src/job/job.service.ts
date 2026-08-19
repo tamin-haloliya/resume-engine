@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Job } from './entities/job.entity';
@@ -23,5 +23,13 @@ export class JobService {
       order: { createdAt: 'DESC' },
     });
     return { jobs, total };
+  }
+
+  async findById(id: string): Promise<Job> {
+    const job = await this.jobRepository.findOneBy({ id });
+    if (!job) {
+      throw new NotFoundException(`Job with id ${id} not found`);
+    }
+    return job;
   }
 }

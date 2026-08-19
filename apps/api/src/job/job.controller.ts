@@ -21,7 +21,7 @@ export class JobController {
   }
 
   @Get()
-  async getJobs(@Query('page') page?: number, @Query('limit') limit?: number) {
+  async findJobs(@Query('page') page?: number, @Query('limit') limit?: number) {
     const { jobs, total } = await this.jobService.findAll(page, limit);
     return { jobs, total };
   }

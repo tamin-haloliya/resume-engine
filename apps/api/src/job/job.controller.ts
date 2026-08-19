@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { JobService } from './job.service';
 
@@ -16,5 +24,11 @@ export class JobController {
   async getJobs(@Query('page') page?: number, @Query('limit') limit?: number) {
     const { jobs, total } = await this.jobService.findAll(page, limit);
     return { jobs, total };
+  }
+
+  @Get(':id')
+  async findById(@Param('id', ParseUUIDPipe) id: string) {
+    const job = await this.jobService.findById(id);
+    return { job };
   }
 }

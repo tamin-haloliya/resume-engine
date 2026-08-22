@@ -8,6 +8,7 @@ import { JobModule } from './job/job.module';
 import Joi from 'joi';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AllExceptionFilter } from './common/filters/all-exception.filter';
       }),
     }),
     JobModule,
+    StorageModule,
   ],
   controllers: [ApiController],
   providers: [

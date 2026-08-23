@@ -9,6 +9,7 @@ import Joi from 'joi';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { StorageModule } from './storage/storage.module';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -41,6 +42,11 @@ import { StorageModule } from './storage/storage.module';
         autoLoadEntities: true,
         synchronize: config.get<string>('NODE_ENV') === 'development',
       }),
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options!).initialize();
+        console.log('db connection established!');
+        return dataSource;
+      },
     }),
     JobModule,
     StorageModule,

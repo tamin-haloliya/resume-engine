@@ -1,28 +1,24 @@
 services:
   postgres:
     image: postgres:18-alpine
+    restart: always
     env_file:
       - .env
-    restart: always
     ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${INIT_DB}
+      - "${DATABASE_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql:rw
+      - pgdata:/var/lib/postgresql/data # Best practice: append /data for Postgres
 
   redis:
     image: redis:8-alpine
     restart: always
+    env_file:
+      - .env
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT}:6379"
     volumes:
       - cache:/data
 
 volumes:
   pgdata:
   cache:
-      
-    

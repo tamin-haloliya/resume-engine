@@ -10,6 +10,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { StorageModule } from './storage/storage.module';
 import { DataSource } from 'typeorm';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -27,6 +28,9 @@ import { DataSource } from 'typeorm';
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
         INIT_DB: Joi.string().required(),
+
+        REDIS_HOST: Joi.string().default('localhost'),
+        REDIS_PORT: Joi.number().port().default(6379),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -50,6 +54,7 @@ import { DataSource } from 'typeorm';
     }),
     JobModule,
     StorageModule,
+    RedisModule,
   ],
   controllers: [ApiController],
   providers: [

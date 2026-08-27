@@ -18,6 +18,9 @@ export class Resume {
   id!: string;
 
   @Column()
+  storageKey!: string;
+
+  @Column()
   originalFilename!: string;
 
   @Column({ type: 'enum', enum: Status, default: Status.PENDING })

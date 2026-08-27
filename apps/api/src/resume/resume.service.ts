@@ -46,4 +46,8 @@ export class ResumeService {
     }
     return { id: resume.id, status: resume.status };
   }
+
+  async get(id: string): Promise<Resume | null> {
+    return await this.resumeRepo.findOneBy({ id });
+  }
 }

@@ -20,4 +20,9 @@ export class DiskStorageService implements StorageService {
   getUrl(key: string): string {
     return path.join(this.uploadDir, key);
   }
+
+  async read(key: string): Promise<Buffer> {
+    const filePath = path.join(this.uploadDir, key);
+    return fs.readFile(filePath);
+  }
 }

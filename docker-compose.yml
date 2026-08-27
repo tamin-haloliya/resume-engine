@@ -4,10 +4,14 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${INIT_DB}
     ports:
       - "${DATABASE_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data # Best practice: append /data for Postgres
+      - pgdata:/var/lib/postgresql:rw
 
   redis:
     image: redis:8-alpine

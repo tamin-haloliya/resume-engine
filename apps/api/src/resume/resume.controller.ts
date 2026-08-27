@@ -1,10 +1,14 @@
 import {
   Controller,
   FileTypeValidator,
+  Get,
   HttpCode,
   HttpStatus,
   MaxFileSizeValidator,
+  NotFoundException,
+  Param,
   ParseFilePipe,
+  ParseUUIDPipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -32,5 +36,17 @@ export class ResumeController {
   ) {
     const response = await this.resumeService.save(file);
     return { response };
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.FOUND)
+  async getResume(@Param('id', ParseUUIDPipe) id: string) {
+    const resume = await this.resumeService.get(id);
+
+    if (!resume) {
+      throw new NotFoundException(`No resume with id ${id} exists`);
+    }
+
+    return resume;
   }
 }

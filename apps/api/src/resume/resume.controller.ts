@@ -1,7 +1,10 @@
 import {
   Controller,
+  FileTypeValidator,
   HttpCode,
   HttpStatus,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -16,8 +19,18 @@ export class ResumeController {
   @Post()
   @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('file'))
-  async addResume(@UploadedFile() file: Express.Multer.File) {
-    const key = await this.resumeService.save(file);
-    return { message: 'Resume uploaded', key };
+  async addResume(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: 'application/pdf' }),
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const response = await this.resumeService.save(file);
+    return { response };
   }
 }

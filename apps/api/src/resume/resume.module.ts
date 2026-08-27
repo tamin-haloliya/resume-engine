@@ -5,6 +5,7 @@ import { ResumeController } from './resume.controller';
 import { ResumeService } from './resume.service';
 import { StorageModule } from '../storage/storage.module';
 import { BullModule } from '@nestjs/bullmq';
+import { ResumeWorker } from './resume.worker';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { BullModule } from '@nestjs/bullmq';
     }),
   ],
   controllers: [ResumeController],
-  providers: [ResumeService],
+  providers: [ResumeService, ResumeWorker],
 })
 export class ResumeModule {}

@@ -11,6 +11,7 @@ import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { StorageModule } from './storage/storage.module';
 import { DataSource } from 'typeorm';
 import { RedisModule } from './redis/redis.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -51,6 +52,16 @@ import { RedisModule } from './redis/redis.module';
         console.log('db connection established!');
         return dataSource;
       },
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        connection: {
+          host: config.get<string>('REDIS_HOST'),
+          port: config.get<number>('REDIS_PORT'),
+        },
+      }),
     }),
     JobModule,
     StorageModule,

@@ -6,6 +6,7 @@ import { Inject, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PDFParse } from 'pdf-parse';
+import { ExtractorService } from '../extractor/extractor.service';
 
 @Processor('resume-processing')
 export class ResumeWorker extends WorkerHost {
@@ -13,6 +14,8 @@ export class ResumeWorker extends WorkerHost {
     @InjectRepository(Resume) private readonly resumeRepo: Repository<Resume>,
     @Inject(storageInterface.STORAGE_SERVICE)
     private readonly storage: storageInterface.StorageService,
+    @Inject(ExtractorService)
+    private readonly extractor: ExtractorService,
   ) {
     super();
   }
@@ -50,13 +53,28 @@ export class ResumeWorker extends WorkerHost {
       );
     }
 
+    let extractedData: string[];
+    try {
+      extractedData = this.extractor.extractSkill(resume.rawData);
+    } catch (err) {
+      Logger.error(`Extraction failed for resume ${resume.id}`, err);
+      throw new UnrecoverableError('Extraction failed');
+    }
+
+    resume.extractedData = {
+      skill: extractedData,
+      experience: null,
+      parsedAt: new Date(),
+      parserVersion: '1.0.0',
+    };
+
     resume.status = Status.PARSED;
     await this.resumeRepo.save(resume);
   }
 
   @OnWorkerEvent('failed')
   async onFailed(job: Job<{ resumeId: string }>) {
-    if (!(await job.isFailed())) return; // more retries queued, not terminal yet
+    if (!(await job.isFailed())) return;
     await this.resumeRepo.update(
       { id: job.data.resumeId },
       { status: Status.FAILED },

@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ExtractorService } from './extractor.service';
 
-@Module({})
+@Module({
+  providers: [ExtractorService]
+})
 export class ExtractorModule {}

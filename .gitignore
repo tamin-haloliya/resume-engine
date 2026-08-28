@@ -47,3 +47,5 @@ docker-compose.override.yml
 # misc
 *.tsbuildinfo
 .eslintcache
+
+diskStorage

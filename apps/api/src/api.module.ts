@@ -13,6 +13,7 @@ import { DataSource } from 'typeorm';
 import { RedisModule } from './redis/redis.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ExtractorModule } from './extractor/extractor.module';
+import { MatchingModule } from './matching/matching.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { ExtractorModule } from './extractor/extractor.module';
     StorageModule,
     RedisModule,
     ExtractorModule,
+    MatchingModule,
   ],
   controllers: [ApiController],
   providers: [

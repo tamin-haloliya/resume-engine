@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { MatchingService } from './matching.service';
 
-@Module({})
+@Module({
+  providers: [MatchingService]
+})
 export class MatchingModule {}

@@ -61,8 +61,12 @@ export class ResumeWorker extends WorkerHost {
       throw new UnrecoverableError('Extraction failed');
     }
 
+    const extractedDataLower: string[] = extractedData.map((skill) => {
+      return skill.toLowerCase();
+    });
+
     resume.extractedData = {
-      skill: extractedData,
+      skill: extractedDataLower,
       experience: null,
       parsedAt: new Date(),
       parserVersion: '1.0.0',

@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PDFParse } from 'pdf-parse';
 import { ExtractorService } from '../extractor/extractor.service';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Processor('resume-processing')
 export class ResumeWorker extends WorkerHost {
@@ -16,6 +17,7 @@ export class ResumeWorker extends WorkerHost {
     private readonly storage: storageInterface.StorageService,
     @Inject(ExtractorService)
     private readonly extractor: ExtractorService,
+    private readonly amqpConnection: AmqpConnection,
   ) {
     super();
   }
@@ -73,6 +75,11 @@ export class ResumeWorker extends WorkerHost {
     };
 
     resume.status = Status.PARSED;
+
+    await this.amqpConnection.publish('resume.events', 'resume.matched', {
+      resumeId: resume.id,
+    });
+
     await this.resumeRepo.save(resume);
   }
 

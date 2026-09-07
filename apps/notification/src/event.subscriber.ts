@@ -3,10 +3,10 @@ import { Injectable, Logger } from '@nestjs/common';
 
 interface ResumeMatchEvent {
   resumeId: string;
-  topMatch: {
-    jobTitle: string;
-    score: number;
-  };
+  // topMatch: {
+  //   jobTitle: string;
+  //   score: number;
+  // };
 }
 
 @Injectable()
@@ -14,11 +14,11 @@ export class EventSubscriber {
   private readonly logger = new Logger(EventSubscriber.name);
 
   @RabbitSubscribe({
-    exchange: 'resume.event',
+    exchange: 'resume.events',
     routingKey: 'resume.matched',
     queue: 'notification-sevice.resume.matched',
   })
   handleEventMatch(payload: ResumeMatchEvent) {
-    console.log('Notification recieved: ', payload);
+    console.log('Hey! Reached here.', payload);
   }
 }

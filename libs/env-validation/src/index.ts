@@ -1,2 +1,1 @@
-export * from './env-validation.module';
-export * from './env-validation.service';
+export * from './base.schema';

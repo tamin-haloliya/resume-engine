@@ -21,6 +21,13 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@app/env-validation": [
+        "libs/env-validation/src"
+      ],
+      "@app/env-validation/*": [
+        "libs/env-validation/src/*"
+      ]
+    }
   }
 }

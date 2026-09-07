@@ -15,28 +15,27 @@ import { BullModule } from '@nestjs/bullmq';
 import { ExtractorModule } from './extractor/extractor.module';
 import { MatchingModule } from './matching/matching.module';
 import { rabbitMQModule } from './config/rabbitmq.config';
+import { baseEnvSchema } from '@app/env-validation';
+
+const resumeEngineEnvSchema = baseEnvSchema.concat(
+  Joi.object({
+    DATABASE_HOST: Joi.string().required(),
+    DATABASE_PORT: Joi.number().port().default(5432),
+    DATABASE_USER: Joi.string().required(),
+    DATABASE_PASSWORD: Joi.string().required(),
+    INIT_DB: Joi.string().required(),
+
+    REDIS_HOST: Joi.string().default('localhost'),
+    REDIS_PORT: Joi.number().port().default(6379),
+  }),
+);
 
 @Module({
   imports: [
     ResumeModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test', 'provision')
-          .default('development'),
-        PORT: Joi.number().port().default(3000),
-
-        DATABASE_HOST: Joi.string().required(),
-        DATABASE_PORT: Joi.number().port().default(5432),
-        DATABASE_USER: Joi.string().required(),
-        DATABASE_PASSWORD: Joi.string().required(),
-        INIT_DB: Joi.string().required(),
-
-        REDIS_HOST: Joi.string().default('localhost'),
-        REDIS_PORT: Joi.number().port().default(6379),
-        MQ_URI: Joi.string().required(),
-      }),
+      validationSchema: resumeEngineEnvSchema,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

@@ -19,6 +19,15 @@
         "tsConfigPath": "apps/api/tsconfig.app.json"
       }
     },
+    "env-validation": {
+      "type": "library",
+      "root": "libs/env-validation",
+      "entryFile": "index",
+      "sourceRoot": "libs/env-validation/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/env-validation/tsconfig.lib.json"
+      }
+    },
     "notification-service": {
       "type": "application",
       "root": "apps/notification-service",

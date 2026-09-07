@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=${INIT_DB}
     ports:
-      - "${DATABASE_PORT}:5432"
+      - '${DATABASE_PORT}:5432'
     volumes:
       - pgdata:/var/lib/postgresql:rw
 
@@ -19,10 +19,29 @@ services:
     env_file:
       - .env
     ports:
-      - "${REDIS_PORT}:6379"
+      - '${REDIS_PORT}:6379'
     volumes:
       - cache:/data
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    env_file:
+      - .env
+    ports:
+      - '${MQ_PORT}:5672'
+      - '${MQ_AMQP_PORT}:15672'
+    environment:
+      - RABBITMQ_DEFAULT_USER=${MQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${MQ_DEFAULT_PASS}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', 'check_port_connectivity']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
   cache:
+  rabbitmq_data:

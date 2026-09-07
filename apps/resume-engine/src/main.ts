@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { ApiModule } from './api.module';
+import { ResumeEngineModule } from './resume-engine.module';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApiModule);
+  const app = await NestFactory.create(ResumeEngineModule);
 
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(

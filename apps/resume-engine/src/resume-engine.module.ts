@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ApiController } from './api.controller';
-import { ApiService } from './api.service';
+import { ResumeEngineController } from './resume-engine.controller';
+import { ResumeEngineService } from './resume-engine.service';
 import { ResumeModule } from './resume/resume.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -73,10 +73,10 @@ const resumeEngineEnvSchema = baseEnvSchema.concat(
     MatchingModule,
     rabbitMQModule,
   ],
-  controllers: [ApiController],
+  controllers: [ResumeEngineController],
   providers: [
-    ApiService,
+    ResumeEngineService,
     { provide: APP_FILTER, useClass: AllExceptionFilter },
   ],
 })
-export class ApiModule {}
+export class ResumeEngineModule {}

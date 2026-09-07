@@ -14,6 +14,7 @@ import { RedisModule } from './redis/redis.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ExtractorModule } from './extractor/extractor.module';
 import { MatchingModule } from './matching/matching.module';
+import { rabbitMQModule } from './config/rabbitmq.config';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MatchingModule } from './matching/matching.module';
 
         REDIS_HOST: Joi.string().default('localhost'),
         REDIS_PORT: Joi.number().port().default(6379),
+        MQ_URI: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -70,6 +72,7 @@ import { MatchingModule } from './matching/matching.module';
     RedisModule,
     ExtractorModule,
     MatchingModule,
+    rabbitMQModule,
   ],
   controllers: [ApiController],
   providers: [

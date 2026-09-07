@@ -7,6 +7,7 @@ import { StorageModule } from '../storage/storage.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ResumeWorker } from './resume.worker';
 import { ExtractorModule } from '../extractor/extractor.module';
+import { rabbitMQModule } from '../config/rabbitmq.config';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ExtractorModule } from '../extractor/extractor.module';
     BullModule.registerQueue({
       name: 'resume-processing',
     }),
+    rabbitMQModule,
   ],
   controllers: [ResumeController],
   providers: [ResumeService, ResumeWorker],

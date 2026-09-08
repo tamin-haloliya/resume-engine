@@ -17,6 +17,10 @@ export class EventSubscriber {
     exchange: 'resume.events',
     routingKey: 'resume.matched',
     queue: 'notification-sevice.resume.matched',
+    queueOptions: {
+      durable: true,
+      autoDelete: false,
+    },
   })
   handleEventMatch(payload: ResumeMatchEvent) {
     console.log('Hey! Reached here.', payload);

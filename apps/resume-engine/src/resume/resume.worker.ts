@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { PDFParse } from 'pdf-parse';
 import { ExtractorService } from '../extractor/extractor.service';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { MatchingService } from '../matching/matching.service';
 
 @Processor('resume-processing')
 export class ResumeWorker extends WorkerHost {
@@ -18,6 +19,7 @@ export class ResumeWorker extends WorkerHost {
     @Inject(ExtractorService)
     private readonly extractor: ExtractorService,
     private readonly amqpConnection: AmqpConnection,
+    private readonly matchingService: MatchingService,
   ) {
     super();
   }
@@ -76,11 +78,17 @@ export class ResumeWorker extends WorkerHost {
 
     resume.status = Status.PARSED;
 
+    await this.resumeRepo.save(resume);
+
+    const topMatched = await this.matchingService.getTopMatched(resume.id);
+
     await this.amqpConnection.publish('resume.events', 'resume.matched', {
       resumeId: resume.id,
+      topMatch: {
+        jobTitle: topMatched.jobTitle,
+        score: topMatched.score,
+      },
     });
-
-    await this.resumeRepo.save(resume);
   }
 
   @OnWorkerEvent('failed')

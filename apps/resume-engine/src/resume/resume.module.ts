@@ -8,6 +8,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { ResumeWorker } from './resume.worker';
 import { ExtractorModule } from '../extractor/extractor.module';
 import { rabbitMQModule } from '../config/rabbitmq.config';
+import { MatchingModule } from '../matching/matching.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { rabbitMQModule } from '../config/rabbitmq.config';
       name: 'resume-processing',
     }),
     rabbitMQModule,
+    MatchingModule,
   ],
   controllers: [ResumeController],
   providers: [ResumeService, ResumeWorker],

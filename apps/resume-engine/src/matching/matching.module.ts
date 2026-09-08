@@ -9,5 +9,6 @@ import { MatchingController } from './matching.controller';
   imports: [TypeOrmModule.forFeature([Resume, Job])],
   providers: [MatchingService],
   controllers: [MatchingController],
+  exports: [MatchingService],
 })
 export class MatchingModule {}

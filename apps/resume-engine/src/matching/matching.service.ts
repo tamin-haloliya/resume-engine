@@ -44,4 +44,14 @@ export class MatchingService {
 
     return ranked.sort((a, b) => b.score - a.score).slice(0, limit);
   }
+
+  async getTopMatched(resumeId: string): Promise<RankedJobsDto> {
+    const rankedList = await this.rankJobForResume(resumeId);
+
+    if (rankedList.length == 0) {
+      throw new NotFoundException('No job available');
+    }
+
+    return rankedList[0];
+  }
 }

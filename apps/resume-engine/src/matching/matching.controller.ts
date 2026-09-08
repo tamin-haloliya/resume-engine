@@ -8,9 +8,13 @@ export class MatchingController {
   @Get(':resumeId')
   getRankedJobs(
     @Param('resumeId') resumeId: string,
-    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
-    return this.matchingService.rankJobForResume(resumeId, page, limit);
+    return this.matchingService.rankJobForResume(resumeId, limit);
+  }
+
+  @Get('top/:resumeId')
+  getTopMatch(@Param('resumeId') resumeId: string) {
+    return this.matchingService.getTopMatched(resumeId);
   }
 }

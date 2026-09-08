@@ -15,7 +15,6 @@ export class MatchingService {
 
   async rankJobForResume(
     resumeId: string,
-    page = 1,
     limit = 10,
   ): Promise<RankedJobsDto[]> {
     const resume = await this.resumeRepo.findOneBy({ id: resumeId });
@@ -24,10 +23,7 @@ export class MatchingService {
       throw new NotFoundException('Resume not found!');
     }
 
-    const jobs = await this.jobRepo.find({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const jobs = await this.jobRepo.find();
 
     const extractedSkills: string[] = resume.extractedData?.skill ?? [];
 
@@ -46,6 +42,6 @@ export class MatchingService {
       };
     });
 
-    return ranked.sort((a, b) => b.score - a.score);
+    return ranked.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 }

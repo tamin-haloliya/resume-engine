@@ -3,10 +3,10 @@ import { Injectable, Logger } from '@nestjs/common';
 
 interface ResumeMatchEvent {
   resumeId: string;
-  // topMatch: {
-  //   jobTitle: string;
-  //   score: number;
-  // };
+  topMatch: {
+    jobTitle: string;
+    score: number;
+  };
 }
 
 @Injectable()

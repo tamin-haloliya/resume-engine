@@ -27,6 +27,12 @@ const resumeEngineEnvSchema = baseEnvSchema.concat(
 
     REDIS_HOST: Joi.string().default('localhost'),
     REDIS_PORT: Joi.number().port().default(6379),
+
+    MINIO_ENDPOINT: Joi.string().required(),
+    MINIO_PORT: Joi.number().default(9000),
+    MINIO_USE_SSL: Joi.boolean().default(false),
+    MINIO_ACCESS_KEY: Joi.string().required(),
+    MINIO_SECRET_KEY: Joi.string().required(),
   }),
 );
 

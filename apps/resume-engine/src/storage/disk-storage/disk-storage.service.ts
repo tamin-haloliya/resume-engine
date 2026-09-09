@@ -17,7 +17,8 @@ export class DiskStorageService implements StorageService {
     await fs.unlink(path.join(this.uploadDir, key));
   }
 
-  getUrl(key: string): string {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async getUrl(key: string): Promise<string> {
     return path.join(this.uploadDir, key);
   }
 

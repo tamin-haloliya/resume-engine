@@ -2,13 +2,14 @@ import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, UnrecoverableError } from 'bullmq';
 import { Resume, Status } from './entities/resume.entity';
 import * as storageInterface from '../storage/storage.interface';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PDFParse } from 'pdf-parse';
 import { ExtractorService } from '../extractor/extractor.service';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { MatchingService } from '../matching/matching.service';
+import { RankedJobsDto } from '../matching/dto/ranked-job.dto';
 
 @Processor('resume-processing')
 export class ResumeWorker extends WorkerHost {
@@ -80,7 +81,18 @@ export class ResumeWorker extends WorkerHost {
 
     await this.resumeRepo.save(resume);
 
-    const topMatched = await this.matchingService.getTopMatched(resume.id);
+    let topMatched: RankedJobsDto;
+
+    try {
+      topMatched = await this.matchingService.getTopMatched(resume.id);
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        Logger.warn(`No jobs available for resume ${resume.id}`);
+        return;
+      }
+      Logger.error(`Matching failed for resume ${resume.id}`, err);
+      throw new UnrecoverableError('Matching failed');
+    }
 
     await this.amqpConnection.publish('resume.events', 'resume.matched', {
       resumeId: resume.id,

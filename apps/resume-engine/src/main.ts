@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { ResumeEngineModule } from './resume-engine.module';
 import { ValidationPipe } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(ResumeEngineModule);
 
   app.setGlobalPrefix('api/v1');
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

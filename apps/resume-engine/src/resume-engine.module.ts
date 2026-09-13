@@ -15,6 +15,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { ExtractorModule } from './extractor/extractor.module';
 import { MatchingModule } from './matching/matching.module';
 import { rabbitMQModule } from './config/rabbitmq.config';
+import { AuthModule } from './auth/auth.module';
 import { baseEnvSchema } from '@app/env-validation';
 
 const resumeEngineEnvSchema = baseEnvSchema.concat(
@@ -82,6 +83,7 @@ const resumeEngineEnvSchema = baseEnvSchema.concat(
     RedisModule,
     ExtractorModule,
     MatchingModule,
+    AuthModule,
     rabbitMQModule,
   ],
   controllers: [ResumeEngineController],

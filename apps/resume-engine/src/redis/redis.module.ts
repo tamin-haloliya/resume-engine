@@ -17,6 +17,12 @@ import Redis from 'ioredis';
         redisInstance.on('ready', () => {
           console.log('redis connection established!');
         });
+
+        redisInstance.on('error', (error: Error) => {
+          console.error('redis connection error:', error.message);
+        });
+
+        return redisInstance;
       },
       inject: [ConfigService],
     },
